@@ -17,7 +17,8 @@ import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
+  withRepeat,
+  withSpring,
 } from "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -32,12 +33,16 @@ export default function RootLayout() {
   });
 
   const progress = useSharedValue(1);
-  const scale = useSharedValue(1);
+  const scale = useSharedValue(2);
 
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: progress.value,
-      transform: [{ scale: scale.value }],
+      borderRadius: (progress.value * SIZE) / 2,
+      transform: [
+        { scale: scale.value },
+        { rotate: `${progress.value * 2 * Math.PI}rad` },
+      ],
     };
   });
 
@@ -48,8 +53,8 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    progress.value = withTiming(0.5);
-    scale.value = withTiming(2);
+    progress.value = withRepeat(withSpring(0.5));
+    scale.value = withRepeat(withSpring(1), 3, true);
   }, []);
 
   if (!loaded) {

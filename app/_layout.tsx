@@ -32,10 +32,12 @@ export default function RootLayout() {
   });
 
   const progress = useSharedValue(1);
+  const scale = useSharedValue(1);
 
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: progress.value,
+      transform: [{ scale: scale.value }],
     };
   });
 
@@ -46,7 +48,8 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    progress.value = withTiming(0, { duration: 5000 });
+    progress.value = withTiming(0.5);
+    scale.value = withTiming(2);
   }, []);
 
   if (!loaded) {
@@ -56,7 +59,6 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
         <Animated.View
           style={[
             { height: SIZE, width: SIZE, backgroundColor: "blue" },

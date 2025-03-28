@@ -14,13 +14,28 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 
 import { StyleSheet, Text, View } from "react-native";
 
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const SIZE = 100.0;
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+  });
+
+  const progress = useSharedValue(1);
+
+  const reanimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: progress.value,
+    };
   });
 
   useEffect(() => {
@@ -37,6 +52,12 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <View style={styles.container}>
         <Text>Open up App.tsx to start working on your app!</Text>
+        <Animated.View
+          style={[
+            { height: SIZE, width: SIZE, backgroundColor: "blue" },
+            reanimatedStyle,
+          ]}
+        />
         <StatusBar style="auto" />
       </View>
       <StatusBar style="auto" />

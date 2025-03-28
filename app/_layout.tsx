@@ -17,6 +17,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
+  withTiming,
 } from "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -43,6 +44,10 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    progress.value = withTiming(0);
+  }, []);
 
   if (!loaded) {
     return null;

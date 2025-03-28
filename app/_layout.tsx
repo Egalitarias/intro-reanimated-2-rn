@@ -35,14 +35,16 @@ export default function RootLayout() {
   const progress = useSharedValue(1);
   const scale = useSharedValue(2);
 
+  const handleRotation = (progress: Animated.SharedValue<number>) => {
+    "worklet";
+
+    return `${progress.value * 2 * Math.PI}rad`;
+  };
   const reanimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: progress.value,
       borderRadius: (progress.value * SIZE) / 2,
-      transform: [
-        { scale: scale.value },
-        { rotate: `${progress.value * 2 * Math.PI}rad` },
-      ],
+      transform: [{ scale: scale.value }, { rotate: handleRotation(progress) }],
     };
   });
 

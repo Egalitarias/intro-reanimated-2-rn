@@ -46,7 +46,7 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    progress.value = withTiming(0);
+    progress.value = withTiming(0, { duration: 5000 });
   }, []);
 
   if (!loaded) {
